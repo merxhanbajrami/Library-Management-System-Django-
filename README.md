@@ -1,10 +1,12 @@
 # Library Management System
 An automated system to manage a public library. Every member of the library club, can interact with the system by borrowing books online, also has its own dashboard where he can see his activity, return dates, deadlines etc. Also an administrator panel for librarians to control and manage the system easily through an interactive interface, where he can manage all books and users, also add new features to the system.
 
-Development
+Development:
+
 The backend of the system is developed using Django. The frontend is developed with HTML,CSS + Bootstrap.
 
-Setup
+Setup:
+
 To use this template to start your own project:
 
 Existing virtualenv
