@@ -19,7 +19,7 @@ $ python3 -m django startproject \
 
 First clone the repository from Github and switch to the new directory:
 
-$ git clone git@github.com/merxhan/Library-Management-System-Django-.git
+$ git clone git@github.com/merxhanbajrami/Library-Management-System-Django-.git
 
 $ cd Library-Management-System-Django-
 
