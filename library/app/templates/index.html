@@ -43,10 +43,17 @@
                 <a class="nav-link" href="#contactForm" style="font-weight: bold;">Contact us</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" rel="tooltip" title="Login here" data-placement="bottom" href="{% url 'login' %}" >
-                  <i class="fas fa-user"></i>
-                  <p class="d-lg-none d-xl-none">Login</p>
-                </a>
+                {% if request.session.is_logged_in %}
+                    <a class="nav-link" rel="tooltip" title="{{request.session.username }}" data-placement="bottom" href="{% url 'login' %}" >
+                      <i class="fas fa-user"></i>
+                      <p class="d-lg-none d-xl-none">Profile</p>
+                    </a>
+                {% else %}
+                  <a class="nav-link" rel="tooltip" title="Login here" data-placement="bottom" href="{% url 'login' %}" >
+                    <i class="fas fa-user"></i>
+                    <p class="d-lg-none d-xl-none">Login</p>
+                  </a>
+                {% endif %}
               </li>
             </ul>
           </div>

@@ -15,6 +15,14 @@ urlpatterns = [
     path('settings', views.settings, name="settings"),
     path('books', views.BooksView.as_view(), name="books"),
     path('author/<int:id>', views.author, name="author"),
-    path('borrow', views.borrow, name="borrow"),
+    path('borrow/<int:id>', views.borrow, name="borrow"),
+    path('return_book/<int:id>', views.return_book, name="return_book"),
+    path('manage-books/', views.manage_books, name="manage_books"),
+    path('manage-users/', views.manage_users, name="manage_users"),
+    path('issued-books/', views.issued, name="issued"),
+    path('archived-books/', views.archive, name="archive"),
+    path('messages/', views.message, name="messages"),
+    path('edit-profile/', views.edit, name="edit"),
+    path('read_message/<int:id>', views.read_message, name="read_message"),
 
 ]

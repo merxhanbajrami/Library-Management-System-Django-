@@ -1,0 +1,33 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+             <div class="user-dashboard">
+                        <div class="row mb-5">
+                            <h3 style="text-align: center;">Archives</h3>
+                            <div class="col-md-12 col-sm-12 col-xs-12 gutter">
+                                <table class="table">
+                                      <thead class="thead">
+                                        <tr>
+                                          <th scope="col">Name</th>
+                                          <th scope="col">Title</th>
+                                          <th scope="col">Author</th>
+                                          <th scope="col">Borrowed date</th>
+                                          <th scope="col">Return date</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for b in books %}
+                                        <tr>
+                                          <td>{{b.user.name}}</td>
+                                          <td>{{b.book.title}}</td>
+                                          <td>{{b.author.name}}</td>
+                                          <td>{{b.borrow_date}}</td>
+                                           <td>{{b.return_date}}</td>
+                                        </tr>
+                                      {% endfor %}
+                                      </tbody>
+                                    </table>
+                            </div>
+                        </div>
+        </div>
+{% endblock %}

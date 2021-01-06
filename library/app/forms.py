@@ -68,10 +68,13 @@ class ContactForm(forms.ModelForm):
     content = forms.CharField(max_length=2000, widget=forms.Textarea(
         attrs={'placeholder': 'Your message ...'}
     ))
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
+
+
     class Meta:
         model = Message
         fields = ['name','email','content']

@@ -10,6 +10,16 @@
         <hr style="visibility: hidden">
         <hr style="visibility: hidden">
         <hr>
-        <p>qrrrr</p>
+            {% for m in messages %}
+                {% if m.type == 1 %}
+                <h4 class="alert-warning">
+                        <i class="fa fa-bell"> {{m.message}}</i>
+                </h4>
+                {% else %}
+                    <h4 class="alert-info">
+                      <i class="fa fa-check"> {{m.message}}</i>
+                    </h4>
+                {% endif %}
+            {% endfor %}
     </div>
 {% endblock %}

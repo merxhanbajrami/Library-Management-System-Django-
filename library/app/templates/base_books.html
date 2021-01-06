@@ -42,9 +42,17 @@
                 <a class="nav-link" href="{% url 'books' %}" style="font-weight: bold;">Books</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" rel="tooltip" title="Login here" data-placement="bottom" href="{% url 'login' %}" >
-                  <i class="fas fa-user"></i>
-                  <p class="d-lg-none d-xl-none">Login</p>
+                {% if request.session.is_logged_in %}
+                    <a class="nav-link" rel="tooltip" title="{{request.session.username }}" data-placement="bottom" href="{% url 'login' %}" >
+                      <i class="fas fa-user"></i>
+                      <p class="d-lg-none d-xl-none">Profile</p>
+                    </a>
+                {% else %}
+                  <a class="nav-link" rel="tooltip" title="Login here" data-placement="bottom" href="{% url 'login' %}" >
+                    <i class="fas fa-user"></i>
+                    <p class="d-lg-none d-xl-none">Login</p>
+                  </a>
+                {% endif %}
                 </a>
               </li>
             </ul>

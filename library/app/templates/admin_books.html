@@ -1,0 +1,35 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+             <div class="user-dashboard">
+                        <div class="row mb-5">
+                            <h3 style="text-align: center;">All Books</h3>
+                            <div class="col-md-12 col-sm-12 col-xs-12 gutter">
+                                <table class="table">
+                                      <thead class="thead">
+                                        <tr>
+                                          <th scope="col">Title</th>
+                                          <th scope="col">Price</th>
+                                          <th scope="col">Category</th>
+                                          <th scope="col">Available</th>
+                                          <th scope="col">Quantity</th>
+                                          <th scope="col">Edit</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for b in books %}
+                                        <tr>
+                                          <td>{{b.title}}</td>
+                                          <td>{{b.price}}$</td>
+                                          <td>{{b.category}}</td>
+                                           <td>{{b.available}}</td>
+                                            <td>{{b.quantity}}</td>
+                                            <td><button class="btn btn-info">Edit</button></td>
+                                        </tr>
+                                      {% endfor %}
+                                      </tbody>
+                                    </table>
+                            </div>
+                        </div>
+        </div>
+{% endblock %}

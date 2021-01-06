@@ -4,239 +4,42 @@
 <style>
 
 </style>
-{% if self_improvement %}
-    <div class="section" >
-    <div class="container" style="background-color:cornflowerblue;">
-    <h2 style="text-align:center;">Self improvement</h2>
-    <div class="row">
-        {% for b in self_improvement %}
-        <div class="col-md-3 col-sm-6 mt-3">
-            <div class="product-grid6">
-                <div class="product-image6">
-                    <a href="#">
-                        <img class="pic-1" src="/static/images/books/{{b.title}}.jpg" alt="author.name">
-                    </a>
+
+{% if books %}
+    {% for book in books %}
+        <div class="section" >
+            <div class="container" style="background-color:{{book.color}}">
+            <h2 style="text-align:center;">{{ book.category }}</h2>
+            <div class="row">
+                {% for b in book.books %}
+                <div class="col-md-3 col-sm-6 mt-3">
+                    <div class="product-grid6">
+                        <div class="product-image6">
+                            <a href="#">
+                                <img class="pic-1" src="/static/images/books/{{b.title}}.jpg" alt="author.name">
+                            </a>
+                        </div>
+                        <div class="product-content">
+                            <h4 class="title"><a href="#">{{b.title}}</a></h4>
+                            <p>Available: <strong>{% if b.available %} <i class="fa fa-check"></i>
+                                {% else %} <i class="fa fa-times"></i>{% endif %}
+                            </strong></p>
+                            <p>{{b.category}}</p>
+                            <div class="price">Price in store: <strong>{{b.price}}$ </strong></div>
+                        </div>
+                         <ul class="social">
+                            <li><a href="#" data-tip="Read more"><i class="fa fa-eye"></i></a></li>
+                            <li><a href="{% url 'author' b.author_id %}" data-tip="Author"><i class="fa fa-user"></i></a></li>
+                            <li><a href="{% url 'borrow' b.id %}" data-tip="Borrow it"><i class="fa fa-plus"></i></a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="product-content">
-                    <h4 class="title"><a href="#">{{b.title}}</a></h4>
-                    <p>Available: <strong>{% if b.available %} <i class="fa fa-check"></i>
-                        {% else %} <i class="fa fa-times"></i>{% endif %}
-                    </strong></p>
-                    <div class="price">Price in store: <strong>{{b.price}}$ </strong></div>
-                </div>
-                <ul class="social">
-                    <li><a href="#" data-tip="Read more"><i class="fa fa-eye"></i></a></li>
-                    <li><a href="{% url 'author' b.author_id %}" data-tip="Author"><i class="fa fa-user"></i></a></li>
-                    <li><a href="{% url 'borrow' %}" data-tip="Borrow it"><i class="fa fa-plus"></i></a></li>
-                </ul>
+                {% endfor %}
             </div>
-        </div>
-        {% endfor %}
-    </div>
-    </div>
-    </div>
-    {% endif %}
-
-{% if politics %}
-    <div class="section" >
-    <div class="container" style="background-color:lightgrey;">
-    <h2 style="text-align:center;">Politics</h2>
-    <div class="row">
-        {% for b in politics %}
-        <div class="col-md-3 col-sm-6 mt-3">
-            <div class="product-grid6">
-                <div class="product-image6">
-                    <a href="#">
-                        <img class="pic-1" src="/static/images/books/{{b.title}}.jpg" alt="author.name">
-                    </a>
-                </div>
-                <div class="product-content">
-                    <h4 class="title"><a href="#">{{b.title}}</a></h4>
-                    <p>Available: <strong>{% if b.available %} <i class="fa fa-check"></i>
-                        {% else %} <i class="fa fa-times"></i>{% endif %}
-                    </strong></p>
-                    <div class="price">Price in store: <strong>{{b.price}}$ </strong></div>
-                </div>
-                <ul class="social">
-                    <li><a href="#" data-tip="Read more"><i class="fa fa-eye"></i></a></li>
-                    <li><a href="{% url 'author' b.author_id %}" data-tip="Author"><i class="fa fa-user"></i></a></li>
-                    <li><a href="{% url 'borrow' %}" data-tip="Borrow it"><i class="fa fa-plus"></i></a></li>
-                </ul>
             </div>
-        </div>
-        {% endfor %}
-    </div>
-    </div>
-    </div>
-    {% endif %}
-
-{% if science %}
-    <div class="section" >
-    <div class="container" style="background-color:lightseagreen;">
-    <h2 style="text-align:center;">Science</h2>
-    <div class="row">
-        {% for b in science %}
-        <div class="col-md-3 col-sm-6 mt-3">
-            <div class="product-grid6">
-                <div class="product-image6">
-                    <a href="#">
-                        <img class="pic-1" src="/static/images/books/{{b.title}}.jpg" alt="author.name">
-                    </a>
-                </div>
-                <div class="product-content">
-                    <h4 class="title"><a href="#">{{b.title}}</a></h4>
-                    <p>Available: <strong>{% if b.available %} <i class="fa fa-check"></i>
-                        {% else %} <i class="fa fa-times"></i>{% endif %}
-                    </strong></p>
-                    <div class="price">Price in store: <strong>{{b.price}}$ </strong></div>
-                </div>
-                <ul class="social">
-                    <li><a href="#" data-tip="Read more"><i class="fa fa-eye"></i></a></li>
-                    <li><a href="{% url 'author' b.author_id %}" data-tip="Author"><i class="fa fa-user"></i></a></li>
-                    <li><a href="{% url 'borrow' %}" data-tip="Borrow it"><i class="fa fa-plus"></i></a></li>
-                </ul>
             </div>
-        </div>
-        {% endfor %}
-    </div>
-    </div>
-    </div>
-    {% endif %}
+    {% endfor %}
+{% endif %}
 
-{% if philosophy %}
-    <div class="section" >
-    <div class="container" style="background-color:lightcoral;">
-    <h2 style="text-align:center;">Philosophy</h2>
-    <div class="row">
-        {% for b in philosophy %}
-        <div class="col-md-3 col-sm-6 mt-3">
-            <div class="product-grid6">
-                <div class="product-image6">
-                    <a href="#">
-                        <img class="pic-1" src="/static/images/books/{{b.title}}.jpg" alt="author.name">
-                    </a>
-                </div>
-                <div class="product-content">
-                    <h4 class="title"><a href="#">{{b.title}}</a></h4>
-                    <p>Available: <strong>{% if b.available %} <i class="fa fa-check"></i>
-                        {% else %} <i class="fa fa-times"></i>{% endif %}
-                    </strong></p>
-                    <div class="price">Price in store: <strong>{{b.price}}$ </strong></div>
-                </div>
-                <ul class="social">
-                    <li><a href="#" data-tip="Read more"><i class="fa fa-eye"></i></a></li>
-                    <li><a href="{% url 'author' b.author_id %}" data-tip="Author"><i class="fa fa-user"></i></a></li>
-                    <li><a href="{% url 'borrow' %}" data-tip="Borrow it"><i class="fa fa-plus"></i></a></li>
-                </ul>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    </div>
-    </div>
-    {% endif %}
-
-
-{% if novel %}
-    <div class="section" >
-    <div class="container" style="background-color:lightyellow;">
-    <h2 style="text-align:center;">Novels</h2>
-    <div class="row">
-        {% for b in novel %}
-        <div class="col-md-3 col-sm-6 mt-3">
-            <div class="product-grid6">
-                <div class="product-image6">
-                    <a href="#">
-                        <img class="pic-1" src="/static/images/books/{{b.title}}.jpg" alt="author.name">
-                    </a>
-                </div>
-                <div class="product-content">
-                    <h4 class="title"><a href="#">{{b.title}}</a></h4>
-                    <p>Available: <strong>{% if b.available %} <i class="fa fa-check"></i>
-                        {% else %} <i class="fa fa-times"></i>{% endif %}
-                    </strong></p>
-                    <div class="price">Price in store: <strong>{{b.price}}$ </strong></div>
-                </div>
-                <ul class="social">
-                    <li><a href="#" data-tip="Read more"><i class="fa fa-eye"></i></a></li>
-                    <li><a href="{% url 'author' b.author_id %}" data-tip="Author"><i class="fa fa-user"></i></a></li>
-                    <li><a href="{% url 'borrow' %}" data-tip="Borrow it"><i class="fa fa-plus"></i></a></li>
-                </ul>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    </div>
-    </div>
-    {% endif %}
-
-
-{% if psychology %}
-    <div class="section" >
-    <div class="container" style="background-color:lightpink;">
-    <h2 style="text-align:center;">Psychology</h2>
-    <div class="row">
-        {% for b in psychology %}
-        <div class="col-md-3 col-sm-6 mt-3">
-            <div class="product-grid6">
-                <div class="product-image6">
-                    <a href="#">
-                        <img class="pic-1" src="/static/images/books/{{b.title}}.jpg" alt="author.name">
-                    </a>
-                </div>
-                <div class="product-content">
-                    <h4 class="title"><a href="#">{{b.title}}</a></h4>
-                    <p>Available: <strong>{% if b.available %} <i class="fa fa-check"></i>
-                        {% else %} <i class="fa fa-times"></i>{% endif %}
-                    </strong></p>
-                    <div class="price">Price in store: <strong>{{b.price}}$ </strong></div>
-                </div>
-                <ul class="social">
-                    <li><a href="#" data-tip="Read more"><i class="fa fa-eye"></i></a></li>
-                    <li><a href="{% url 'author' b.author_id %}" data-tip="Author"><i class="fa fa-user"></i></a></li>
-                    <li><a href="{% url 'borrow' %}" data-tip="Borrow it"><i class="fa fa-plus"></i></a></li>
-                </ul>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    </div>
-    </div>
-    {% endif %}
-
-
-
-{% if astronomy %}
-    <div class="section" >
-    <div class="container" style="background-color:yellowgreen;">
-    <h2 style="text-align:center;">Astronomy</h2>
-    <div class="row">
-        {% for b in astronomy %}
-        <div class="col-md-3 col-sm-6 mt-3">
-            <div class="product-grid6">
-                <div class="product-image6">
-                    <a href="#">
-                        <img class="pic-1" src="/static/images/books/{{b.title}}.jpg" alt="author.name">
-                    </a>
-                </div>
-                <div class="product-content">
-                    <h4 class="title"><a href="#">{{b.title}}</a></h4>
-                    <p>Available: <strong>{% if b.available %} <i class="fa fa-check"></i>
-                        {% else %} <i class="fa fa-times"></i>{% endif %}
-                    </strong></p>
-                    <div class="price">Price in store: <strong>{{b.price}}$ </strong></div>
-                </div>
-                <ul class="social">
-                    <li><a href="#" data-tip="Read more"><i class="fa fa-eye"></i></a></li>
-                    <li><a href="{% url 'author' b.author_id %}" data-tip="Author"><i class="fa fa-user"></i></a></li>
-                    <li><a href="{% url 'borrow' %}" data-tip="Borrow it"><i class="fa fa-plus"></i></a></li>
-                </ul>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    </div>
-    </div>
-    {% endif %}
 
 {% endblock %}

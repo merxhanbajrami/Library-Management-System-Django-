@@ -1,0 +1,67 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+        <div class="user-dashboard">
+                        <div class="row mb-5">
+                            {% if unread %}
+                            <h3 style="text-align: center;">Open messages</h3>
+                            <div class="col-md-12 col-sm-12 col-xs-12 gutter">
+                                <table class="table">
+                                      <thead class="thead">
+                                        <tr>
+                                          <th scope="col">Name</th>
+                                          <th scope="col">Email</th>
+                                          <th scope="col">Content</th>
+                                          <th scope="col">Read</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for m in unread %}
+                                        <tr>
+                                          <td>{{m.name}}</td>
+                                          <td>{{m.email}}</td>
+                                            <td><p >{{m.content}}</p></td>
+                                            <td>
+                                                {% if not m.marked %}
+                                              <a href="{% url 'read_message' m.id %}" class="btn btn-primary">
+                                                  <i class="fa fa-check"></i>
+                                              </a>
+                                              {% else %}
+                                                <span class="badge bg-primary">Opened</span>
+                                              {% endif %}
+                                            </td>
+                                        </tr>
+                                      {% endfor %}
+                                      </tbody>
+                                    </table>
+                            </div>
+                            {% endif %}
+                        </div>
+                            <h3 style="text-align: center;" class="mt-4">Archived messages</h3>
+                            <div class="col-md-12 col-sm-12 col-xs-12 gutter mt-4">
+                                <table class="table">
+                                      <thead class="thead">
+                                        <tr>
+                                          <th scope="col">Name</th>
+                                          <th scope="col">Email</th>
+                                          <th scope="col">Content</th>
+                                           <th scope="col"> Read </th>
+
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for m in all %}
+                                        <tr>
+                                          <td>{{m.name}}</td>
+                                          <td>{{m.email}}</td>
+                                          <td><p >{{m.content}}</p></td>
+                                          <td>
+                                              <span class="badge bg-primary">Opened</span>
+                                          </td>
+                                        </tr>
+                                      {% endfor %}
+                                      </tbody>
+                                    </table>
+                            </div>
+        </div>
+{% endblock %}

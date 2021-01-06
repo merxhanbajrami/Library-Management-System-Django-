@@ -3,6 +3,9 @@ from django.views import View
 from django.contrib import messages
 from .models import *
 from .forms import *
+from django.db.models import Count
+import datetime
+from datetime import timedelta
 
 
 # Create your views here.
@@ -30,9 +33,8 @@ class LoginView(View):
     def get(self, request):
         if request.session.get('is_logged_in'):
             return redirect('dashboard')
-        else:
-            form = LoginForm
-            return render(request, 'login.html', context={'form': form})
+        form = LoginForm
+        return render(request, 'login.html', context={'form': form})
 
     def post(self, request):
         form = LoginForm(request.POST)
@@ -40,6 +42,8 @@ class LoginView(View):
             username = request.POST['username']
             password = request.POST['password']
             user = User.objects.filter(username=username)
+            if username == 'admin':
+                return redirect('admin')
             if user:
                 if user[0].password == password:
                     request.session['is_logged_in'] = True
@@ -84,6 +88,9 @@ class RegisterView(View):
 
 class BooksView(View):
     def get(self, request):
+        #books = Book.objects.all().group_by("category")
+        #books = Book.objects.all().order_by("category")
+
         politics = Book.objects.filter(category='Politics')
         science = Book.objects.filter(category='Science')
         philosophy = Book.objects.filter(category='Philosophy')
@@ -91,14 +98,18 @@ class BooksView(View):
         astronomy = Book.objects.filter(category='Astronomy')
         psychology = Book.objects.filter(category='Psychology')
         self_improvement = Book.objects.filter(category='Self improvement')
+
         context = {
-            'politics': politics,
-            'science': science,
-            'philosophy': philosophy,
-            'novel':novel,
-            'psychology':psychology,
-            'astronomy':astronomy,
-            'self_improvement':self_improvement
+            'books': [
+                {'category' : 'Politics', 'books' : politics, 'color' : 'blue'},
+                {'category' : 'Novel', 'books' : novel,'color':'red'},
+                {'category' : 'Science', 'books' : science,'color':'yellow'},
+                {'category': 'Astronomy', 'books': astronomy, 'color': 'lightgreen'},
+                {'category': 'Philosophy', 'books': philosophy, 'color': 'lightpink'},
+                {'category': 'Psychology', 'books': psychology, 'color': 'lightgrey'},
+                {'category': 'Self improvement', 'books': self_improvement, 'color': 'darkgrey'},
+
+            ]
         }
         return render(request, 'books.html', context=context)
 
@@ -108,10 +119,35 @@ class BooksView(View):
 
 def dashboard(request):
     user = User.objects.filter(username=request.session.get('username')).first()
+    result = Borrow.objects.filter(user=user)
+    messages = []
+    for r in result:
+        book = Book.objects.filter(id=r.book_id).first()
+        return_date = r.date + timedelta(days=20)
+        diff = return_date.day - datetime.datetime.now().day
+        if diff >= 0:
+            message = {
+                'message': "You have " + str(diff) + " days to return the book " + book.title,
+                'type': 1
+            }
+            messages.append(message)
+        else:
+            message = {
+                'message': "You have succesfully read the book " + book.title,
+                'type': 2
+            }
+            messages.append(message)
+
     context = {
-        'user': user
+        'messages': messages
     }
     return render(request, 'base.html', context=context)
+
+
+def return_book(request, id):
+    book = Book.objects.filter(id=id).first()
+    b = Borrow.objects.filter(book=book).delete()
+    return redirect('dashboard')
 
 
 def author(request, id):
@@ -124,8 +160,22 @@ def author(request, id):
     return render(request, 'author.html', context=context)
 
 
-def borrow(request):
-    return HttpResponse('BORROWING')
+def borrow(request, id):
+    if not request.session.get('is_logged_in'):
+        return redirect('login')
+    user = User.objects.filter(username=request.session.get('username')).first()
+    book = Book.objects.filter(id=id).first()
+    if book.quantity <= 0:
+        book.available = 0
+
+    # borrowing
+    if book.available == 1:
+        book.quantity = book.quantity - 1
+        borrows = Borrow.objects.create(date=datetime.datetime.now(), user=user, book=book)
+    else:
+        return HttpResponse("Book is not available")
+
+    return redirect('dashboard')
 
 
 def profile(request):
@@ -138,9 +188,25 @@ def profile(request):
 
 def my_books(request, id):
     user = User.objects.filter(id=id).first()
-    books = Borrow.objects.filter(user=user.id)
+    result = Borrow.objects.filter(user=user)
+    books = []
+    for r in result:
+        book = Book.objects.filter(id=r.book_id).first()
+        author = Author.objects.filter(id=book.author_id).first()
+        borrowed_date = r.date
+        return_date = r.date
+        data = {
+            'book': book,
+            'author': author,
+            'borrow_date': borrowed_date,
+            'return_date': return_date + timedelta(days=20)
+        }
+        books.append(data)
+    # return HttpResponse(books)
     context = {
         'books': books,
+        'user': user,
+        'result': result
     }
     return render(request, 'my_books.html', context=context)
 
@@ -154,6 +220,98 @@ def logout(request):
 def settings(request):
     return render(request, 'settings.html')
 
-
 def admin(request):
-    return render(request, 'admin.html')
+    m = Message.objects.filter(marked=False).count()
+    books = Book.objects.all().count()
+    context = {
+        'length': m,
+        'total_books':books,
+    }
+    return render(request, 'admin_dashboard.html', context=context)
+
+
+def manage_books(request):
+    books = Book.objects.all()
+    context = {
+        'books': books,
+    }
+    return render(request, 'admin_books.html', context=context)
+
+
+def manage_users(request):
+    users = User.objects.all()
+    data = []
+    for u in users:
+        if not u.username == 'admin':
+            data.append(u)
+    context = {
+        'users': data,
+    }
+    return render(request, 'admin_users.html', context=context)
+
+
+def issued(request):
+    result = Borrow.objects.all()
+    books = []
+    for r in result:
+        book = Book.objects.filter(id=r.book_id).first()
+        author = Author.objects.filter(id=book.author_id).first()
+        user = User.objects.filter(id=r.user_id).first()
+        borrowed_date = r.date
+        return_date = r.date
+        data = {
+            'user':user,
+            'book': book,
+            'author': author,
+            'borrow_date': borrowed_date,
+            'return_date': return_date + timedelta(days=20)
+        }
+        if return_date <= datetime.datetime.now().date():
+            books.append(data)
+    context = {
+        'books': books,
+    }
+    return render(request, 'admin_issued.html', context=context)
+
+
+def archive(request):
+    result = Borrow.objects.all()
+    books = []
+    for r in result:
+        book = Book.objects.filter(id=r.book_id).first()
+        author = Author.objects.filter(id=book.author_id).first()
+        user = User.objects.filter(id=r.user_id).first()
+        borrowed_date = r.date
+        return_date = r.date
+        data = {
+            'user':user,
+            'book': book,
+            'author': author,
+            'borrow_date': borrowed_date,
+            'return_date': return_date + timedelta(days=20)
+        }
+        books.append(data)
+
+    context = {
+        'books': books,
+    }
+    return render(request, 'admin_archive.html',context=context)
+
+
+def message(request):
+    unread = Message.objects.filter(marked=False).all()
+
+    all = Message.objects.filter(marked=True).order_by("marked")
+
+    context = {
+        'unread': unread,
+        'all': all
+    }
+    return render(request, 'admin_messages.html', context=context)
+
+def read_message(request,id):
+    message = Message.objects.filter(id=id).update(marked=True)
+    return redirect('messages')
+
+def edit(request):
+    return render(request, 'admin_edit.html')

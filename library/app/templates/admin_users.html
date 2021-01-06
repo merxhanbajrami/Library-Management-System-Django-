@@ -1,0 +1,35 @@
+{% extends 'admin.html' %}
+
+{% block content %}
+         <div class="user-dashboard">
+                        <div class="row mb-5">
+                            <h3 style="text-align: center;">All users</h3>
+                            <div class="col-md-12 col-sm-12 col-xs-12 gutter">
+                                <table class="table">
+                                      <thead class="thead">
+                                        <tr>
+                                          <th scope="col">Name</th>
+                                          <th scope="col">Email</th>
+                                          <th scope="col">Username</th>
+                                          <th scope="col">Points</th>
+                                          <th scope="col">Address</th>
+                                          <th scope="col"></th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                      {% for u in users %}
+                                        <tr>
+                                          <td>{{u.name}}</td>
+                                          <td>{{u.email}}</td>
+                                          <td>{{u.username}}</td>
+                                           <td>{{u.points}}</td>
+                                            <td>{{u.address}}</td>
+                                            <td><a href="#" class="btn btn-danger">Block</a></td>
+                                        </tr>
+                                      {% endfor %}
+                                      </tbody>
+                                    </table>
+                            </div>
+                        </div>
+        </div>
+{% endblock %}

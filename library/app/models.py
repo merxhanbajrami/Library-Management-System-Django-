@@ -28,8 +28,8 @@ class Book(models.Model):
     price = models.FloatField()
     available = models.BooleanField()
     category = models.CharField(max_length=200, default='Novel')
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -41,7 +41,7 @@ class Borrow(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.date
+        return str(self.date)
 
 
 class Review(models.Model):
