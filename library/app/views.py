@@ -101,9 +101,9 @@ class BooksView(View):
 
         context = {
             'books': [
-                {'category': 'Politics', 'books': politics, 'color': 'blue'},
-                {'category': 'Novel', 'books': novel, 'color': 'red'},
-                {'category': 'Science', 'books': science, 'color': 'yellow'},
+                {'category': 'Politics', 'books': politics, 'color': 'lightblue'},
+                {'category': 'Novel', 'books': novel, 'color': 'lightdark'},
+                {'category': 'Science', 'books': science, 'color': 'lightyellow'},
                 {'category': 'Astronomy', 'books': astronomy, 'color': 'lightgreen'},
                 {'category': 'Philosophy', 'books': philosophy, 'color': 'lightpink'},
                 {'category': 'Psychology', 'books': psychology, 'color': 'lightgrey'},
@@ -140,12 +140,19 @@ def dashboard(request):
             }
             messages.append(message)
 
-    admin_messages = alert.objects.filter(user=user,is_read=False).all()
-
+    admin_messages = alert.objects.filter(user=user, is_read=False).all()
+    events = Event.objects.filter(ended=False).all()
+    my_events=[]
+    for e in events:
+        if datetime.datetime.now().day - e.date.day >= 0:
+            e.ended = 1
+        else:
+            my_events.append(e)
     context = {
         'messages': messages,
         'user': user,
         'admin_messages': admin_messages,
+        'events':my_events,
     }
     return render(request, 'base.html', context=context)
 
@@ -233,14 +240,13 @@ def admin(request):
     users = User.objects.all().count()
     borrowed = Borrow.objects.all().count()
     user = User.objects.filter(username='admin').first()
-    inbox = alert.objects.filter(user=user,is_read=False)
+    inbox = alert.objects.filter(user=user, is_read=False)
     sender = None
     if len(inbox) > 0:
-        id = inbox[0].user_id
         list = alert.objects.filter(subject=inbox[0].subject).all()
         for s in list:
-            user = User.objects.filter(id = s.user_id).first()
-            if  user.username != 'admin':
+            user = User.objects.filter(id=s.user_id).first()
+            if user.username != 'admin':
                 sender = user
                 break
     members = User.objects.all()
@@ -248,10 +254,10 @@ def admin(request):
         'total_books': books,
         'total_users': users,
         'total_issued': borrowed,
-        'inbox':inbox,
-        'sender':sender,
-        'total_inbox':len(inbox),
-        'users':members,
+        'inbox': inbox,
+        'sender': sender,
+        'total_inbox': len(inbox),
+        'users': members,
     }
     return render(request, 'admin_dashboard.html', context=context)
 
@@ -360,21 +366,58 @@ class AlertView(View):
         a = alert.objects.create(user=user, subject=subject, content=content, is_read=False)
         return redirect('admin')
 
-def close(request,id):
+
+def close(request, id):
     a = alert.objects.filter(id=id).update(is_read=True)
     return redirect('admin')
 
+
 class ReplyView(View):
-    def get(self,request,id):
+    def get(self, request, id):
+        user = User.objects.filter(username=request.session.get('username')).first()
         case = alert.objects.filter(id=id).first()
-        context={
-            'case':case
+        context = {
+            'case': case,
+            'user': user,
         }
-        return render(request,'user_reply.html',context=context)
-    def post(self,request,id):
-        c =alert.objects.filter(id=id).first()
+        return render(request, 'user_reply.html', context=context)
+
+    def post(self, request, id):
+        c = alert.objects.filter(id=id).first()
         case = alert.objects.filter(id=id).update(is_read=True)
         content = request.POST['content']
         user = User.objects.filter(username='admin').first()
         a = alert.objects.create(user=user, subject=c.subject, content=content, is_read=False)
         return redirect("dashboard")
+
+
+def event(request):
+    events = Event.objects.filter(ended=False).all()
+    my_events=[]
+    for e in events:
+        if datetime.datetime.now().day - e.date.day >= 0:
+            e.ended = 1
+        else:
+            my_events.append(e)
+
+    context = {
+        'events': my_events
+    }
+    return render(request, 'admin_events.html', context=context)
+
+def delete_event(request,id):
+    event = Event.objects.filter(id=id).delete()
+    return redirect('event')
+
+def add_event(request):
+    if request.method == "POST":
+        name = request.POST.get('name')
+        venue = request.POST.get('venue')
+        date_time = request.POST.get('time')
+        event = Event.objects.create(name=name, venue=venue, date=date_time, ended=False)
+    return redirect('event')
+
+
+def block(requset, id):
+    User.objects.filter(id=id).delete()
+    return redirect('manage_users')

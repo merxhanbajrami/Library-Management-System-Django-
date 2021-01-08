@@ -1,4 +1,4 @@
-{% extends 'dashboard.html' %}
+{% extends 'admin.html' %}
 {% block content %}
 {% if events %}
 <style>
@@ -19,13 +19,13 @@
 		display: inline-block;
 		width: 100%;
 		color: rgb(255, 255, 255);
-		background-color: #0e1a35;
+		background-color: #f96332;
 		padding: 5px;
 		text-align: center;
 		text-transform: uppercase;
 	}
 	.event-list > li:nth-child(even) > time {
-		background-color: #0e1a35;
+		background-color: #f96332;
 	}
 	.event-list > li > time > span {
 		display: none;
@@ -184,66 +184,53 @@
                             </p>
 						</div>
 					</li>
+                    <a class="btn btn-danger" style="margin-bottom: 20px;" href="{% url 'delete_event' e.id %}">
+                            Delete event
+                    </a>
                     {% endfor %}
 				</ul>
 			</div>
 		</div>
 	</div>
 {% endif %}
-    <div class="sales report">
-        <h2>Your activity</h2>
-        <div class="btn-group">
-            <button class="btn btn-secondary btn-lg" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span>Period:</span> All time
-            </button>
+<div class="container" style="width:1000px;">
+    <form class="form-horizontal" action="{% url 'add_event' %}" method="POST">
+        {% csrf_token %}
+    <fieldset>
+        <legend>Add Event</legend>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="textinput">Name</label>
+            <div class="col-md-6">
+                <input id="textinput" name="name" type="text" placeholder="" class="form-control input-md" required="">
+            </div>
         </div>
-        <hr style="visibility: hidden">
-        <hr style="visibility: hidden">
-        <hr>
-            {% for m in messages %}
-                {% if m.type == 1 %}
-                <h4 class="alert-warning">
-                        <i class="fa fa-bell"> {{m.message}}</i>
-                </h4>
-                {% else %}
-                    <h4 class="alert-info">
-                      <i class="fa fa-check"> {{m.message}}</i>
-                    </h4>
-                {% endif %}
-            {% endfor %}
-        <hr style="visibility: hidden">
-        <h2>Your inbox</h2>
-        <hr style="visibility: hidden">
-        <hr style="visibility: hidden">
-        <hr style="visibility: hidden">
-        {% if admin_messages %}
-         <table class="table">
-             <thead class="thead">
-             <tr>
-                 <th scope="col">From</th>
-                 <th scope="col">Subject</th>
-                 <th scope="col">Content</th>
-                 <th scope="col"></th>
-             </tr>
-             </thead>
-             <tbody>
-             {% for m in admin_messages %}
-             <tr>
-                 <td>admin</td>
-                 <td>{{m.subject}}</td>
-                 <td>{{m.content}}</td>
-                 <td>
-                     <a href="{% url 'reply' m.id %}" class="btn btn-primary">Reply</a>
-                 </td>
-             </tr>
-             {% endfor %}
-             </tbody>
-         </table>
-        {% else %}
-            <p class="alert alert-info"><i class="fa fa-inbox fa-1x"></i>
-                <span style="font-size:15px;">You're all up to date</span>
-            </p>
-        {% endif %}
 
-    </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="eventDate">Date</label>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <input id="eventDate" name="time" class="form-control" type="datetime-local" required="">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="venueName">Venue</label>
+            <div class="col-md-6">
+                <input id="venueName" name="venue" type="text" placeholder="" class="form-control input-md">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="submitButton"></label>
+            <div class="col-md-8">
+                <button id="submitButton" name="submitButton" type="submit" class="btn btn-primary">Save</button>
+                <button id="cancelButton" name="cancelButton" type="cancel" class="btn btn-danger">Cancel</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+</div>
 {% endblock %}

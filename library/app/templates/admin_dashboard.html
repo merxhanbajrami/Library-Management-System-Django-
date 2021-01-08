@@ -83,12 +83,12 @@
                     </p>
                 {% endif %}
         </div>
-        <div class="container">
-            <h2>Send a message</h2>
+        <div class="container" style="width:1000px;">
+            <h2>Notify members</h2>
                  <div class="row">
                     <div class="panel panel-default">
                     <div class="panel-heading clearfix">
-                      <h3 class="panel-title">Send Message</h3>
+                      <h3 class="panel-title">Send a message</h3>
                     </div>
                     <div class="panel-body">
                         <form role="form" class="form-horizontal" action="{% url 'alert' 1 %}" method="post">
@@ -96,10 +96,10 @@
                             <div class="form-group">
                               <label class="col-sm-2" for="inputTo">To</label>
                               <div class="col-sm-10">
-                                  <select type="email" class="form-control" id="inputTo" onchange="updateId(this.value)">
+                                  <select type="text" class="form-control" id="inputTo">
                                       <option value="Select user"></option>
                                       {% for u in members%}
-                                        <option value="{{u.id}}">{{u.name}}</option>
+                                        <option value="{{u.name}}"></option>
                                       {% endfor %}
                                   </select>
                               </div>

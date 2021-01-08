@@ -24,7 +24,7 @@
                                           <td>{{u.username}}</td>
                                            <td>{{u.points}}</td>
                                             <td>{{u.address}}</td>
-                                            <td><a href="#" class="btn btn-danger">Block</a></td>
+                                            <td><a href="{% url 'block' u.id %}" class="btn btn-danger">Block</a></td>
                                         </tr>
                                       {% endfor %}
                                       </tbody>

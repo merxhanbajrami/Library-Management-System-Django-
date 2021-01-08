@@ -27,5 +27,9 @@ urlpatterns = [
     path('alert_user/<int:id>',views.AlertView.as_view(),name="alert"),
     path('reply/<int:id>', views.ReplyView.as_view(), name="reply"),
     path('close/<int:id>', views.close, name="close"),
+    path('block/<int:id>', views.block, name="block"),
+    path('events', views.event, name="event"),
+    path('add-event', views.add_event, name="add_event"),
+    path('delete-event/<int:id>', views.delete_event, name="delete_event"),
 
 ]

@@ -28,6 +28,7 @@
                             <li><a href="{% url 'manage_users' %}"><i class="fa fa-users" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Manage users</span></a></li>
                             <li><a href="{% url 'issued' %}"><i class="fa fa-folder-open" aria-hidden="true"></i><span class="hidden-xs hidden-sm">All issued books</span></a></li>
                             <li><a href="{% url 'archive' %}"><i class="fa fa-folder" aria-hidden="true"></i><span class="hidden-xs hidden-sm">All archive books</span></a></li>
+                            <li><a href="{% url 'event' %}"><i class="fa fa-calendar" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Events</span></a></li>
                             <li><a href="{% url 'messages' %}"><i class="fa fa-inbox" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Messages</span></a></li>
                             <li><a href="#"><i class="fa fa-cog" aria-hidden="true"></i><span class="hidden-xs hidden-sm">About software</span></a></li>
                         </ul>
@@ -50,7 +51,7 @@
                             <div class="col-md-5">
                                 <div class="header-rightside">
                                     <ul class="list-inline header-top pull-right">
-                                        <li class="hidden-xs"><a href="#" class="add-project" data-toggle="modal" data-target="#add_project">Add Project</a></li>
+                                        <li class="hidden-xs"><a href="{% url 'event' %}" class="add-project" data-toggle="modal" data-target="#add_project">Add Event</a></li>
                                         <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
                                         <li>
                                             <a href="{% url 'messages' %}" class="icon-info">

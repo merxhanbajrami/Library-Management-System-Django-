@@ -70,3 +70,13 @@ class alert(models.Model):
 
     def __str__(self):
         return self.content
+
+
+class Event(models.Model):
+    name = models.CharField(max_length=200)
+    venue = models.CharField(max_length=200)
+    date = models.DateTimeField()
+    ended = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
