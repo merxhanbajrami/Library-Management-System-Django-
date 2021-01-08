@@ -25,7 +25,7 @@
                             <li class="active"><a href="{% url 'dashboard' %}"><i class="fa fa-home" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Home</span></a></li>
                             <li><a href="{% url 'profile' %}"><i class="fa fa-user" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Profile</span></a></li>
                             <li><a href="{% url 'my_books' user.id %}"><i class="fa fa-book" aria-hidden="true"></i><span class="hidden-xs hidden-sm">My books</span></a></li>
-                            <li><a href="#"><i class="fa fa-calendar" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Calendar</span></a></li>
+                            <li><a href="{% url 'event' %}"><i class="fa fa-calendar" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Events</span></a></li>
                             <li><a href="{% url 'settings' %}"><i class="fa fa-cog" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Settings</span></a></li>
                         </ul>
                     </div>

@@ -258,32 +258,46 @@ def admin(request):
         'sender': sender,
         'total_inbox': len(inbox),
         'users': members,
+        'length':m,
     }
     return render(request, 'admin_dashboard.html', context=context)
 
 
 def manage_books(request):
+    m = Message.objects.filter(marked=False).count()
+    user = User.objects.filter(username=request.session.get('username')).first()
+    inbox = alert.objects.filter(user=user, is_read=False)
     books = Book.objects.all()
     context = {
         'books': books,
+        'length':m,
+        'total_inbox':len(inbox),
     }
     return render(request, 'admin_books.html', context=context)
 
 
 def manage_users(request):
+    m = Message.objects.filter(marked=False).count()
     users = User.objects.all()
+    user = User.objects.filter(username=request.session.get('username')).first()
+    inbox = alert.objects.filter(user=user, is_read=False)
     data = []
     for u in users:
         if not u.username == 'admin':
             data.append(u)
     context = {
         'users': data,
+        'length':m,
+        'total_inbox':len(inbox),
     }
     return render(request, 'admin_users.html', context=context)
 
 
 def issued(request):
+    m = Message.objects.filter(marked=False).count()
     result = Borrow.objects.all()
+    user = User.objects.filter(username=request.session.get('username')).first()
+    inbox = alert.objects.filter(user=user, is_read=False)
     books = []
     for r in result:
         book = Book.objects.filter(id=r.book_id).first()
@@ -296,18 +310,23 @@ def issued(request):
             'book': book,
             'author': author,
             'borrow_date': borrowed_date,
-            'return_date': return_date + timedelta(days=20)
+            'return_date': return_date + timedelta(days=20),
         }
         if return_date <= datetime.datetime.now().date():
             books.append(data)
     context = {
         'books': books,
+        'length':m,
+        'total_inbox':len(inbox)
     }
     return render(request, 'admin_issued.html', context=context)
 
 
 def archive(request):
+    m = Message.objects.filter(marked=False).count()
     result = Borrow.objects.all()
+    user = User.objects.filter(username=request.session.get('username')).first()
+    inbox = alert.objects.filter(user=user, is_read=False)
     books = []
     for r in result:
         book = Book.objects.filter(id=r.book_id).first()
@@ -320,24 +339,29 @@ def archive(request):
             'book': book,
             'author': author,
             'borrow_date': borrowed_date,
-            'return_date': return_date + timedelta(days=20)
+            'return_date': return_date + timedelta(days=20),
         }
         books.append(data)
 
     context = {
         'books': books,
+        'length':m,
+        'total_inbox':len(inbox),
     }
     return render(request, 'admin_archive.html', context=context)
 
 
 def message(request):
     unread = Message.objects.filter(marked=False).all()
-
+    m = Message.objects.filter(marked=False).count()
     all = Message.objects.filter(marked=True).order_by("marked")
-
+    user = User.objects.filter(username=request.session.get('username')).first()
+    inbox = alert.objects.filter(user=user, is_read=False)
     context = {
         'unread': unread,
-        'all': all
+        'all': all,
+        'length':m,
+        'total_inbox':len(inbox),
     }
     return render(request, 'admin_messages.html', context=context)
 
@@ -348,14 +372,26 @@ def read_message(request, id):
 
 
 def edit(request):
+    m = Message.objects.filter(marked=False).count()
+    user = User.objects.filter(username=request.session.get('username')).first()
+    inbox = alert.objects.filter(user=user, is_read=False)
+    context={
+        'length':m,
+        'total_inbox':len(inbox),
+    }
     return render(request, 'admin_edit.html')
 
 
 class AlertView(View):
     def get(self, request, id):
+        m = Message.objects.filter(marked=False).count()
         user = User.objects.filter(id=id).first()
+        u = User.objects.filter(username=request.session.get('username')).first()
+        inbox = alert.objects.filter(user=u, is_read=False)
         context = {
             'user': user,
+            'length':m,
+            'total_inbox':len(inbox),
         }
         return render(request, 'admin_alert.html', context=context)
 
@@ -369,16 +405,25 @@ class AlertView(View):
 
 def close(request, id):
     a = alert.objects.filter(id=id).update(is_read=True)
-    return redirect('admin')
+    user = User.objects.filter(username=request.session.get('username')).first()
+    if user.name =='amdin':
+        return redirect('admin')
+    else:
+        return redirect('dashboard')
 
 
 class ReplyView(View):
     def get(self, request, id):
+        m = Message.objects.filter(marked=False).count()
         user = User.objects.filter(username=request.session.get('username')).first()
         case = alert.objects.filter(id=id).first()
+        y = User.objects.filter(username=request.session.get('username')).first()
+        inbox = alert.objects.filter(user=y, is_read=False)
         context = {
             'case': case,
             'user': user,
+            'length':m,
+            'total_inbox':len(inbox),
         }
         return render(request, 'user_reply.html', context=context)
 
@@ -393,6 +438,9 @@ class ReplyView(View):
 
 def event(request):
     events = Event.objects.filter(ended=False).all()
+    m = Message.objects.filter(marked=False).count()
+    user = User.objects.filter(username=request.session.get('username')).first()
+    inbox = alert.objects.filter(user=user, is_read=False)
     my_events=[]
     for e in events:
         if datetime.datetime.now().day - e.date.day >= 0:
@@ -401,9 +449,15 @@ def event(request):
             my_events.append(e)
 
     context = {
-        'events': my_events
+        'events': my_events,
+        'length':m,
+        'total_inbox':len(inbox)
     }
-    return render(request, 'admin_events.html', context=context)
+    user = User.objects.filter(username=request.session.get('username')).first()
+    if user.username == 'admin':
+        return render(request, 'admin_events.html', context=context)
+    else:
+        return redirect('dashboard')
 
 def delete_event(request,id):
     event = Event.objects.filter(id=id).delete()
@@ -418,6 +472,17 @@ def add_event(request):
     return redirect('event')
 
 
-def block(requset, id):
+def block(request, id):
     User.objects.filter(id=id).delete()
     return redirect('manage_users')
+
+def about(request):
+    content = "An automated system to manage a public library. Every member of the library club, " \
+              "can interact with the system by borrowing books online, also has its own dashboard where " \
+              "he can see his activity, return dates, deadlines etc. Also an administrator panel for librarians " \
+              "to control and manage the system easily through an interactive interface," \
+              " where he can manage all books and users, also add new features to the system."
+    context={
+        'content':content,
+    }
+    return render(request,'admin_about.html',context=context)

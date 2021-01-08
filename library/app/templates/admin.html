@@ -30,7 +30,7 @@
                             <li><a href="{% url 'archive' %}"><i class="fa fa-folder" aria-hidden="true"></i><span class="hidden-xs hidden-sm">All archive books</span></a></li>
                             <li><a href="{% url 'event' %}"><i class="fa fa-calendar" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Events</span></a></li>
                             <li><a href="{% url 'messages' %}"><i class="fa fa-inbox" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Messages</span></a></li>
-                            <li><a href="#"><i class="fa fa-cog" aria-hidden="true"></i><span class="hidden-xs hidden-sm">About software</span></a></li>
+                            <li><a href="{% url 'about' %}"><i class="fa fa-cog" aria-hidden="true"></i><span class="hidden-xs hidden-sm">About software</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -52,7 +52,14 @@
                                 <div class="header-rightside">
                                     <ul class="list-inline header-top pull-right">
                                         <li class="hidden-xs"><a href="{% url 'event' %}" class="add-project" data-toggle="modal" data-target="#add_project">Add Event</a></li>
-                                        <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a></li>
+                                        <li>
+                                            <a href="{% url 'admin' %}" class="icon-info">
+                                                 <i class="fa fa-envelope" aria-hidden="true"></i>
+                                                {% if total_inbox > 0 %}
+                                                    <span class="label label-primary">{{total_inbox}}</span>
+                                                {% endif %}
+                                            </a>
+                                        </li>
                                         <li>
                                             <a href="{% url 'messages' %}" class="icon-info">
                                                 <i class="fa fa-bell" aria-hidden="true"></i>
@@ -78,33 +85,6 @@
                 </div>
             </div>
 
-        </div>
-
-
-
-        <!-- Modal -->
-        <div id="add_project" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header login-header">
-                        <button type="button" class="close" data-dismiss="modal">×</button>
-                        <h4 class="modal-title">Add Project</h4>
-                    </div>
-                    <div class="modal-body">
-                                <input type="text" placeholder="Project Title" name="name">
-                                <input type="text" placeholder="Post of Post" name="mail">
-                                <input type="text" placeholder="Author" name="passsword">
-                                <textarea placeholder="Desicrption"></textarea>
-                        </div>
-                    <div class="modal-footer">
-                        <button type="button" class="cancel" data-dismiss="modal">Close</button>
-                        <button type="button" class="add-project" data-dismiss="modal">Save</button>
-                    </div>
-                </div>
-
-            </div>
         </div>
 
     </body>

@@ -162,9 +162,11 @@
 		}
 	}
 </style>
-
+<div class="sales report">
  <div class="container" style="width: 1000px;">
-     <h3>Current events</h3>
+     <h2>Current events</h2>
+     <hr style="visibility: hidden;">
+     <hr style="visibility: hidden;">
      <hr>
 		<div class="row">
 			<div class="[ col-xs-12 col-sm-offset-2 col-sm-8 ]">
@@ -190,7 +192,6 @@
 		</div>
 	</div>
 {% endif %}
-    <div class="sales report">
         <h2>Your activity</h2>
         <div class="btn-group">
             <button class="btn btn-secondary btn-lg" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -224,6 +225,7 @@
                  <th scope="col">Subject</th>
                  <th scope="col">Content</th>
                  <th scope="col"></th>
+                 <th scope="col"></th>
              </tr>
              </thead>
              <tbody>
@@ -234,6 +236,9 @@
                  <td>{{m.content}}</td>
                  <td>
                      <a href="{% url 'reply' m.id %}" class="btn btn-primary">Reply</a>
+                 </td>
+                 <td>
+                     <a href="{% url 'close' m.id %}" class="btn btn-danger">Close</a>
                  </td>
              </tr>
              {% endfor %}
