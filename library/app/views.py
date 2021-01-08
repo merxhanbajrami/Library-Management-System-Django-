@@ -42,12 +42,12 @@ class LoginView(View):
             username = request.POST['username']
             password = request.POST['password']
             user = User.objects.filter(username=username)
-            if username == 'admin':
-                return redirect('admin')
             if user:
                 if user[0].password == password:
                     request.session['is_logged_in'] = True
                     request.session['username'] = username
+                    if user[0].is_admin:
+                        return redirect('admin')
                     return redirect('dashboard')
                 else:
                     messages.add_message(request, messages.ERROR, 'Password is incorrect!')
@@ -88,8 +88,8 @@ class RegisterView(View):
 
 class BooksView(View):
     def get(self, request):
-        #books = Book.objects.all().group_by("category")
-        #books = Book.objects.all().order_by("category")
+        # books = Book.objects.all().group_by("category")
+        # books = Book.objects.all().order_by("category")
 
         politics = Book.objects.filter(category='Politics')
         science = Book.objects.filter(category='Science')
@@ -101,9 +101,9 @@ class BooksView(View):
 
         context = {
             'books': [
-                {'category' : 'Politics', 'books' : politics, 'color' : 'blue'},
-                {'category' : 'Novel', 'books' : novel,'color':'red'},
-                {'category' : 'Science', 'books' : science,'color':'yellow'},
+                {'category': 'Politics', 'books': politics, 'color': 'blue'},
+                {'category': 'Novel', 'books': novel, 'color': 'red'},
+                {'category': 'Science', 'books': science, 'color': 'yellow'},
                 {'category': 'Astronomy', 'books': astronomy, 'color': 'lightgreen'},
                 {'category': 'Philosophy', 'books': philosophy, 'color': 'lightpink'},
                 {'category': 'Psychology', 'books': psychology, 'color': 'lightgrey'},
@@ -119,6 +119,8 @@ class BooksView(View):
 
 def dashboard(request):
     user = User.objects.filter(username=request.session.get('username')).first()
+    if user.is_admin:
+        return redirect('admin')
     result = Borrow.objects.filter(user=user)
     messages = []
     for r in result:
@@ -138,8 +140,12 @@ def dashboard(request):
             }
             messages.append(message)
 
+    admin_messages = alert.objects.filter(user=user,is_read=False).all()
+
     context = {
-        'messages': messages
+        'messages': messages,
+        'user': user,
+        'admin_messages': admin_messages,
     }
     return render(request, 'base.html', context=context)
 
@@ -220,12 +226,32 @@ def logout(request):
 def settings(request):
     return render(request, 'settings.html')
 
+
 def admin(request):
     m = Message.objects.filter(marked=False).count()
     books = Book.objects.all().count()
+    users = User.objects.all().count()
+    borrowed = Borrow.objects.all().count()
+    user = User.objects.filter(username='admin').first()
+    inbox = alert.objects.filter(user=user,is_read=False)
+    sender = None
+    if len(inbox) > 0:
+        id = inbox[0].user_id
+        list = alert.objects.filter(subject=inbox[0].subject).all()
+        for s in list:
+            user = User.objects.filter(id = s.user_id).first()
+            if  user.username != 'admin':
+                sender = user
+                break
+    members = User.objects.all()
     context = {
-        'length': m,
-        'total_books':books,
+        'total_books': books,
+        'total_users': users,
+        'total_issued': borrowed,
+        'inbox':inbox,
+        'sender':sender,
+        'total_inbox':len(inbox),
+        'users':members,
     }
     return render(request, 'admin_dashboard.html', context=context)
 
@@ -260,7 +286,7 @@ def issued(request):
         borrowed_date = r.date
         return_date = r.date
         data = {
-            'user':user,
+            'user': user,
             'book': book,
             'author': author,
             'borrow_date': borrowed_date,
@@ -284,7 +310,7 @@ def archive(request):
         borrowed_date = r.date
         return_date = r.date
         data = {
-            'user':user,
+            'user': user,
             'book': book,
             'author': author,
             'borrow_date': borrowed_date,
@@ -295,7 +321,7 @@ def archive(request):
     context = {
         'books': books,
     }
-    return render(request, 'admin_archive.html',context=context)
+    return render(request, 'admin_archive.html', context=context)
 
 
 def message(request):
@@ -309,9 +335,46 @@ def message(request):
     }
     return render(request, 'admin_messages.html', context=context)
 
-def read_message(request,id):
+
+def read_message(request, id):
     message = Message.objects.filter(id=id).update(marked=True)
     return redirect('messages')
 
+
 def edit(request):
     return render(request, 'admin_edit.html')
+
+
+class AlertView(View):
+    def get(self, request, id):
+        user = User.objects.filter(id=id).first()
+        context = {
+            'user': user,
+        }
+        return render(request, 'admin_alert.html', context=context)
+
+    def post(self, request, id):
+        subject = request.POST['subject']
+        content = request.POST['content']
+        user = User.objects.filter(id=id).first()
+        a = alert.objects.create(user=user, subject=subject, content=content, is_read=False)
+        return redirect('admin')
+
+def close(request,id):
+    a = alert.objects.filter(id=id).update(is_read=True)
+    return redirect('admin')
+
+class ReplyView(View):
+    def get(self,request,id):
+        case = alert.objects.filter(id=id).first()
+        context={
+            'case':case
+        }
+        return render(request,'user_reply.html',context=context)
+    def post(self,request,id):
+        c =alert.objects.filter(id=id).first()
+        case = alert.objects.filter(id=id).update(is_read=True)
+        content = request.POST['content']
+        user = User.objects.filter(username='admin').first()
+        a = alert.objects.create(user=user, subject=c.subject, content=content, is_read=False)
+        return redirect("dashboard")

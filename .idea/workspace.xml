@@ -2,26 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="55529d2f-a73b-4a3f-be88-a4ede5da45c6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/library/app/static/css/admin.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/library/app/templates/admin_archive.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/library/app/templates/admin_books.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/library/app/templates/admin_dashboard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/library/app/templates/admin_edit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/library/app/templates/admin_issued.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/library/app/templates/admin_messages.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/library/app/templates/admin_users.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/library/app/templates/admin_alert.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/library/app/templates/user_reply.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library/app/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library/app/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/library/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library/app/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/templates/admin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library/app/templates/author.html" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/templates/author.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library/app/templates/admin_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/templates/admin_dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/library/app/templates/admin_issued.html" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/templates/admin_issued.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/library/app/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library/app/templates/base_books.html" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/templates/base_books.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library/app/templates/books.html" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/templates/books.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library/app/templates/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/templates/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library/app/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/library/app/templates/my_books.html" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/templates/my_books.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/library/app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/library/app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/library/app/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/library/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/library/db.sqlite3" afterDir="false" />
@@ -89,7 +77,8 @@
       <workItem from="1609781464233" duration="17656000" />
       <workItem from="1609862878752" duration="9960000" />
       <workItem from="1609883307293" duration="7131000" />
-      <workItem from="1609952822872" duration="7148000" />
+      <workItem from="1609952822872" duration="7546000" />
+      <workItem from="1610064051526" duration="10705000" />
     </task>
     <servers />
   </component>
@@ -97,10 +86,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="319" y="222" key="com.intellij.ide.util.TipDialog" timestamp="1609952822616">
+    <state x="319" y="222" key="com.intellij.ide.util.TipDialog" timestamp="1610064051505">
       <screen x="0" y="23" width="1280" height="733" />
     </state>
-    <state x="319" y="222" key="com.intellij.ide.util.TipDialog/0.23.1280.733@0.23.1280.733" timestamp="1609952822616" />
+    <state x="319" y="222" key="com.intellij.ide.util.TipDialog/0.23.1280.733@0.23.1280.733" timestamp="1610064051505" />
     <state x="319" y="222" key="com.intellij.ide.util.TipDialog/1280.-287.1680.1027/0.23.1280.733@1280.-287.1680.1027" timestamp="1609631566872" />
     <state x="298" y="23" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1609890939936">
       <screen x="0" y="23" width="1280" height="733" />

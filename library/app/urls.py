@@ -24,5 +24,8 @@ urlpatterns = [
     path('messages/', views.message, name="messages"),
     path('edit-profile/', views.edit, name="edit"),
     path('read_message/<int:id>', views.read_message, name="read_message"),
+    path('alert_user/<int:id>',views.AlertView.as_view(),name="alert"),
+    path('reply/<int:id>', views.ReplyView.as_view(), name="reply"),
+    path('close/<int:id>', views.close, name="close"),
 
 ]

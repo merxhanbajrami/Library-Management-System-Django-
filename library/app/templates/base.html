@@ -21,5 +21,32 @@
                     </h4>
                 {% endif %}
             {% endfor %}
+        <hr style="visibility: hidden">
+        <h2>Your inbox</h2>
+        <hr style="visibility: hidden">
+        <hr style="visibility: hidden">
+        <hr style="visibility: hidden">
+         <table class="table">
+             <thead class="thead">
+             <tr>
+                 <th scope="col">From</th>
+                 <th scope="col">Subject</th>
+                 <th scope="col">Content</th>
+                 <th scope="col"></th>
+             </tr>
+             </thead>
+             <tbody>
+             {% for m in admin_messages %}
+             <tr>
+                 <td>admin</td>
+                 <td>{{m.subject}}</td>
+                 <td>{{m.content}}</td>
+                 <td>
+                     <a href="{% url 'reply' m.id %}" class="btn btn-primary">Reply</a>
+                 </td>
+             </tr>
+             {% endfor %}
+             </tbody>
+         </table>
     </div>
 {% endblock %}

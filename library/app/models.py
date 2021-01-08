@@ -9,7 +9,7 @@ class User(models.Model):
     password = models.CharField(max_length=200)
     points = models.IntegerField(default=0)
     address = models.CharField(max_length=200)
-
+    is_admin = models.BooleanField(default=False)
     def __str__(self):
         return self.name
 
@@ -58,6 +58,15 @@ class Message(models.Model):
     email = models.EmailField(max_length=200)
     content = models.CharField(max_length=2000)
     marked = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.content
+
+class alert(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.CharField(max_length=300)
+    is_read = models.BooleanField(default=False)
+    subject = models.CharField(max_length=100,default=" ")
 
     def __str__(self):
         return self.content
